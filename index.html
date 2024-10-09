@@ -3,13 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Restaurant Map</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>My Restaurant Map - Rome</title>
+    <style>
+        /* Set the size of the div element that contains the map */
+        #map {
+            height: 500px;  /* Height of the map */
+            width: 100%;    /* Full width of the map */
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to My Restaurant Map</h1>
+    <h1>My Restaurant Map - Rome</h1>
+
+    <!-- The div element where the Google Map will be displayed -->
     <div id="map"></div>
+
+    <script>
+        // Initialize and add the map
+        function initMap() {
+            // The location (latitude, longitude) of Rome
+            const rome = { lat: 41.9028, lng: 12.4964 };
+
+            // The map, centered at Rome
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: rome,
+            });
+
+            // Example: Adding a marker at the center (Rome)
+            const marker = new google.maps.Marker({
+                position: rome,
+                map: map,
+                title: "Rome, Italy",
+            });
+        }
+    </script>
+
+    <!-- Load the Google Maps API and call the initMap function once it's loaded -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU8HhA6YtCVnBA0TDESGWUGijURnB8mcI&callback=initMap" async defer></script>
-    <script src="js/script.js"></script>
 </body>
 </html>
