@@ -1,101 +1,129 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Custom Google Maps with Categories and Subcategories</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restaurant Map</title>
     <style>
-      /* Style the map */
-      #map {
-        height: 500px;
-        width: 100%;
-      }
-      /* Style for filters */
-      .filter-container {
-        margin: 20px;
-      }
-      button {
-        margin-right: 10px;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Custom Google Maps with Categories</h1>
+        /* Basic styling */
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    <!-- Buttons for filtering -->
-    <div class="filter-container">
-      <button onclick="filterPlaces('Restaurant', 'Asian')">Asian Restaurants</button>
-      <button onclick="filterPlaces('Restaurant', 'Italian')">Italian Restaurants</button>
-      <button onclick="filterPlaces('Park', 'Nature')">Nature Parks</button>
-      <button onclick="filterPlaces('Park', 'Playground')">Playgrounds</button>
+        #map {
+            height: 70vh; /* Set map height */
+            width: 100%; /* Full width */
+        }
+
+        /* Sidebar styling */
+        .sidebar {
+            width: 300px;
+            max-height: 70vh;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            margin: 10px;
+            padding: 10px;
+        }
+
+        .restaurant {
+            cursor: pointer;
+            padding: 5px;
+            border: 1px solid #ddd;
+            margin: 5px 0;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .restaurant:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Restaurant Map</h1>
+    <div id="map"></div>
+    <div class="sidebar">
+        <h2>Restaurants</h2>
+        <div id="restaurant-list"></div>
     </div>
 
-    <!-- The Map -->
-    <div id="map"></div>
-
     <script>
-      let map;
-      let markers = [];
+        // Your restaurant data
+        const restaurants = [
+            {
+                name: "Pizza Place",
+                lat: 40.7128,
+                lng: -74.0060,
+                cuisine: "Italian",
+                rating: "4.5"
+            },
+            {
+                name: "Sushi Spot",
+                lat: 40.7138,
+                lng: -74.0080,
+                cuisine: "Japanese",
+                rating: "4.8"
+            },
+            {
+                name: "Burger Joint",
+                lat: 40.7118,
+                lng: -74.0040,
+                cuisine: "American",
+                rating: "4.0"
+            },
+            // Add more restaurants as needed
+        ];
 
-      // Your custom places with categories and subcategories
-      const places = [
-        { name: "Restaurant 1", lat: 37.7749, lng: -122.4194, category: "Restaurant", subcategory: "Asian" },
-        { name: "Restaurant 2", lat: 37.7849, lng: -122.4294, category: "Restaurant", subcategory: "Italian" },
-        { name: "Park 1", lat: 37.7649, lng: -122.4194, category: "Park", subcategory: "Nature" },
-        { name: "Park 2", lat: 37.7549, lng: -122.4394, category: "Park", subcategory: "Playground" }
-      ];
+        let map;
+        let markers = [];
 
-      // Initialize the map
-      function initMap() {
-        map = new google.maps.Map(document.getElementById("map"), {
-          center: { lat: 37.7749, lng: -122.4194 },
-          zoom: 12,
-        });
+        function initMap() {
+            // Set the initial map location and zoom level
+            const location = { lat: 40.7128, lng: -74.0060 }; // New York City
 
-        // Display all places initially
-        showPlaces(places);
-      }
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 12,
+                center: location,
+            });
 
-      // Show markers for places based on the array
-      function showPlaces(placesArray) {
-        clearMarkers(); // Clear existing markers
+            // Add markers and list to the sidebar
+            addMarkersAndList();
+        }
 
-        placesArray.forEach(place => {
-          const marker = new google.maps.Marker({
-            position: { lat: place.lat, lng: place.lng },
-            map: map,
-            title: place.name,
-          });
+        function addMarkersAndList() {
+            const restaurantList = document.getElementById("restaurant-list");
 
-          const infoWindow = new google.maps.InfoWindow({
-            content: `<h3>${place.name}</h3><p>Category: ${place.category}<br>Subcategory: ${place.subcategory}</p>`,
-          });
+            restaurants.forEach((restaurant) => {
+                // Create a marker
+                const marker = new google.maps.Marker({
+                    position: { lat: restaurant.lat, lng: restaurant.lng },
+                    map: map,
+                    title: restaurant.name,
+                });
 
-          marker.addListener("click", () => {
-            infoWindow.open(map, marker);
-          });
+                markers.push(marker);
 
-          markers.push(marker); // Add marker to the markers array
-        });
-      }
+                // Create a list item for the restaurant
+                const listItem = document.createElement("div");
+                listItem.className = "restaurant";
+                listItem.innerText = `${restaurant.name} - ${restaurant.cuisine} (Rating: ${restaurant.rating})`;
+                
+                // Add click event to the list item
+                listItem.addEventListener("click", () => {
+                    map.setCenter(marker.getPosition());
+                    map.setZoom(15); // Zoom in on the selected restaurant
+                });
 
-      // Filter places based on category and subcategory
-      function filterPlaces(category, subcategory) {
-        const filteredPlaces = places.filter(
-          place => place.category === category && place.subcategory === subcategory
-        );
-        showPlaces(filteredPlaces);
-      }
-
-      // Clear existing markers
-      function clearMarkers() {
-        markers.forEach(marker => {
-          marker.setMap(null);
-        });
-        markers = [];
-      }
-
-      // Initialize the map on load
-      window.onload = initMap;
+                restaurantList.appendChild(listItem);
+            });
+        }
     </script>
-  </body>
+
+    <!-- Load the Google Maps JavaScript API -->
+    <script async
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+    </script>
+</body>
 </html>
