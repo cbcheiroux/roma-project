@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Custom Google Maps with Categories and Subcategories</title>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+    <style>
+      /* Style the map */
+      #map {
+        height: 500px;
+        width: 100%;
+      }
+      /* Style for filters */
+      .filter-container {
+        margin: 20px;
+      }
+      button {
+        margin-right: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Custom Google Maps with Categories</h1>
+
+    <!-- Buttons for filtering -->
+    <div class="filter-container">
+      <button onclick="filterPlaces('Restaurant', 'Asian')">Asian Restaurants</button>
+      <button onclick="filterPlaces('Restaurant', 'Italian')">Italian Restaurants</button>
+      <button onclick="filterPlaces('Park', 'Nature')">Nature Parks</button>
+      <button onclick="filterPlaces('Park', 'Playground')">Playgrounds</button>
+    </div>
+
+    <!-- The Map -->
+    <div id="map"></div>
+
+    <script>
+      let map;
+      let markers = [];
+
+      // Your custom places with categories and subcategories
+      const places = [
+        { name: "Restaurant 1", lat: 37.7749, lng: -122.4194, category: "Restaurant", subcategory: "Asian" },
+        { name: "Restaurant 2", lat: 37.7849, lng: -122.4294, category: "Restaurant", subcategory: "Italian" },
+        { name: "Park 1", lat: 37.7649, lng: -122.4194, category: "Park", subcategory: "Nature" },
+        { name: "Park 2", lat: 37.7549, lng: -122.4394, category: "Park", subcategory: "Playground" }
+      ];
+
+      // Initialize the map
+      function initMap() {
+        map = new google.maps.Map(document.getElementById("map"), {
+          center: { lat: 37.7749, lng: -122.4194 },
+          zoom: 12,
+        });
+
+        // Display all places initially
+        showPlaces(places);
+      }
+
+      // Show markers for places based on the array
+      function showPlaces(placesArray) {
+        clearMarkers(); // Clear existing markers
+
+        placesArray.forEach(place => {
+          const marker = new google.maps.Marker({
+            position: { lat: place.lat, lng: place.lng },
+            map: map,
+            title: place.name,
+          });
+
+          const infoWindow = new google.maps.InfoWindow({
+            content: `<h3>${place.name}</h3><p>Category: ${place.category}<br>Subcategory: ${place.subcategory}</p>`,
+          });
+
+          marker.addListener("click", () => {
+            infoWindow.open(map, marker);
+          });
+
+          markers.push(marker); // Add marker to the markers array
+        });
+      }
+
+      // Filter places based on category and subcategory
+      function filterPlaces(category, subcategory) {
+        const filteredPlaces = places.filter(
+          place => place.category === category && place.subcategory === subcategory
+        );
+        showPlaces(filteredPlaces);
+      }
+
+      // Clear existing markers
+      function clearMarkers() {
+        markers.forEach(marker => {
+          marker.setMap(null);
+        });
+        markers = [];
+      }
+
+      // Initialize the map on load
+      window.onload = initMap;
+    </script>
+  </body>
+</html>
