@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roma Project</title>
+    <title>My Restaurant Map - Rome</title>
     <style>
         /* Set the size of the div element that contains the map */
         #map {
@@ -13,7 +13,7 @@
     </style>
 </head>
 <body>
-    <h1>Roma Project</h1>
+    <h1>My Restaurant Map - Rome</h1>
 
     <!-- The div element where the Google Map will be displayed -->
     <div id="map"></div>
@@ -30,10 +30,14 @@
                 center: rome,
             });
 
-            // Example: Adding a marker at the center (Rome)
-            const marker = new google.maps.Marker({
-                position: rome,
+            // Example: Adding a marker at the center (Rome) using AdvancedMarkerElement
+            const markerElement = document.createElement('div');
+            markerElement.textContent = "Rome, Italy";
+
+            const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
                 map: map,
+                position: rome,
+                content: markerElement,
                 title: "Rome, Italy",
             });
         }
