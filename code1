@@ -123,7 +123,7 @@
 
     <!-- Load the Google Maps JavaScript API -->
     <script async
-        src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCU8HhA6YtCVnBA0TDESGWUGijURnB8mcIcallback=initMap">
     </script>
 </body>
 </html>
