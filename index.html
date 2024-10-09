@@ -10,6 +10,15 @@
             height: 500px;  /* Height of the map */
             width: 100%;    /* Full width of the map */
         }
+
+        /* Optional custom styling for the advanced marker */
+        .custom-marker {
+            background-color: red;
+            color: white;
+            padding: 5px;
+            border-radius: 3px;
+            font-family: Arial, sans-serif;
+        }
     </style>
 </head>
 <body>
@@ -19,26 +28,26 @@
     <div id="map"></div>
 
     <script>
-        // Initialize and add the map
         function initMap() {
             // The location (latitude, longitude) of Rome
             const rome = { lat: 41.9028, lng: 12.4964 };
 
-            // The map, centered at Rome
+            // Create a new map instance, centered at Rome
             const map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 12,
                 center: rome,
             });
 
-            // Example: Adding a marker at the center (Rome) using AdvancedMarkerElement
+            // Create an HTML element for the advanced marker
             const markerElement = document.createElement('div');
-            markerElement.textContent = "Rome, Italy";
+            markerElement.classList.add('custom-marker');
+            markerElement.textContent = 'Rome, Italy';
 
+            // Create the advanced marker
             const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
                 map: map,
                 position: rome,
                 content: markerElement,
-                title: "Rome, Italy",
             });
         }
     </script>
