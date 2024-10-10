@@ -38,16 +38,24 @@
                 center: rome,
             });
 
-            // Create an HTML element for the advanced marker
-            const markerElement = document.createElement('div');
-            markerElement.classList.add('custom-marker');
-            markerElement.textContent = 'Rome, Italy';
+            // List of registered restaurant locations (add your locations here)
+            const restaurants = [
+                { name: 'Risotteria Melotti', position: { lat: 41.899377, lng: 12.471664 } },
+                { name: 'Osteria Fratelli Mori', position: { lat: 41.8853, lng: 12.4897 } },
+                // Add more restaurants here
+            ];
 
-            // Create the advanced marker
-            const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
-                map: map,
-                position: rome,
-                content: markerElement,
+            // Create markers for each restaurant
+            restaurants.forEach((restaurant) => {
+                const markerElement = document.createElement('div');
+                markerElement.classList.add('custom-marker');
+                markerElement.textContent = restaurant.name;
+
+                const advancedMarker = new google.maps.marker.AdvancedMarkerElement({
+                    map: map,
+                    position: restaurant.position,
+                    content: markerElement,
+                });
             });
         }
     </script>
